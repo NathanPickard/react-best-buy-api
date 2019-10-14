@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import ProductList from './components/products';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  state = {
+    products: []
+  }
+
+  componentDidMount() {
+    fetch('https://api.bestbuy.com/v1/products(search=oven&search=stainless&search=steel)?format=json&show=all&apiKey=mPlbr5GXMVkagVgzwT7T2V5X')
+      .then(res => res.json())
+      .then((data) => {
+        this.setState({ products: data.products })
+        console.log(data.products[0].images);
+      })
+      .catch(console.log)
+  }
+
+  render() {
+    return (
+      <ProductList products={this.state.products} />
+    );
+  }
 }
 
 export default App;
